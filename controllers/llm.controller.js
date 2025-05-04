@@ -13,7 +13,9 @@ const MISTRAL_API_URL = 'https://api.mistral.ai/v1/chat/completions';
 const STYLE_PROMPTS = {
   Socratic: `You are an expert in the Socratic teaching method. Create a dialogue between a Teacher and a Student that explores the concepts in the text through probing questions that lead the student to discover insights for themselves. The dialogue should follow the Socratic method where the teacher asks leading questions rather than providing direct answers. Include at least 8-10 exchanges that progressively build understanding.`,
   
-  Platonic: `You are an expert in the Platonic dialogue style of teaching. Create a dialogue between a Teacher and a Student that explores the concepts in the text in a structured, explanatory manner. The teacher should guide the conversation while providing clear explanations. The dialogue should include at least 8-10 exchanges that systematically develop the subject matter.`
+  Platonic: `You are an expert in the Platonic dialogue style of teaching. Create a dialogue between a Teacher and a Student that explores the concepts in the text in a structured, explanatory manner. The teacher should guide the conversation while providing clear explanations. The dialogue should include at least 8-10 exchanges that systematically develop the subject matter.`,
+  
+  Story: `You are an expert storyteller and educator. Create a dialogue primarily led by a Teacher who explains concepts from the text by weaving them into engaging short stories and narratives. The Teacher should do most of the talking, using storytelling techniques to illustrate key points and lessons. The Student should occasionally ask clarifying questions or express insights. Format as a dialogue with "Teacher:" and "Student:" prefixes, but with the Teacher's parts being significantly longer and story-focused. Include at least 6-8 exchanges with emphasis on the Teacher's narrative explanations.`
 };
 
 /**
@@ -33,10 +35,10 @@ export const generateReed = async (req, res) => {
       });
     }
     
-    if (!['Socratic', 'Platonic'].includes(style)) {
+    if (!['Socratic', 'Platonic', 'Story'].includes(style)) {
       return res.status(400).json({
         success: false,
-        error: 'Invalid style. Choose either "Socratic" or "Platonic"'
+        error: 'Invalid style. Choose either "Socratic", "Platonic", or "Story"'
       });
     }
     
