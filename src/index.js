@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import extractionRoutes from '../routes/extraction.routes.js';
 import llmRoutes from '../routes/llm.routes.js';
+import systemRoutes from '../routes/system.routes.js';
 
 // Load environment variables
 dotenv.config();
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/extraction', extractionRoutes);
 app.use('/api/llm', llmRoutes);
+app.use('/api/system', systemRoutes);
 
 // Basic route for testing
 app.get('/', (req, res) => {
