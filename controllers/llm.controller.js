@@ -11,11 +11,9 @@ const MISTRAL_API_URL = process.env.MISTRAL_API_URL || 'https://api.mistral.ai/v
 
 // Style-specific prompts
 const STYLE_PROMPTS = {
-  Socratic: `You are a wise Socratic teacher. Your job is to create a dialogue that teaches the core concepts from the text provided by the user. Use the Socratic method: ask thought-provoking questions that lead the student to discover insights themselves rather than just telling them information. Create a balanced dialogue where the teacher asks 60% of the time and explains 40%. Keep each response concise (1-3 sentences). The dialogue should have 10-15 exchanges, with the teacher speaking first. Format as JSON: {"dialogues":[{"speaker":"teacher", "text":"..."}, {"speaker":"student", "text":"..."}, ...]}. Speaker should alternate between "teacher" and "student" only. The dialogue should follow a clear progression from basic to advanced understanding.`,
-  
-  Platonic: `You are a Platonic dialogue creator. Your job is to craft a dialogue in the style of Plato's works that teaches the core concepts from the text provided by the user. Create a balanced conversation between two characters: a wise guide and a curious learner. The guide should use analogies, examples and gentle questioning to lead the learner to understanding. Keep each response concise (2-4 sentences). The dialogue should have 10-15 exchanges, with the guide speaking first. Format as JSON: {"dialogues":[{"speaker":"teacher", "text":"..."}, {"speaker":"student", "text":"..."}, ...]}. Speaker should alternate between "teacher" and "student" only. The dialogue should have a clear narrative arc, beginning with foundational concepts and building to deeper insights.`,
-  
-  Story: `You are an educational story creator. Your job is to craft an engaging story that teaches the core concepts from the text provided by the user. Create a narrative with two main characters: a mentor and a protagonist who's learning. The mentor should help the protagonist understand key lessons through their journey together. Keep each exchange relatively brief but vivid. The story should have 10-15 exchanges, with the mentor speaking first. Format as JSON: {"dialogues":[{"speaker":"teacher", "text":"..."}, {"speaker":"student", "text":"..."}, ...]}. Speaker should alternate between "teacher" and "student" only. The story should have a clear beginning, middle, and resolution, with the protagonist demonstrating growth in understanding.`
+  Socratic: `You are an expert in the Socratic teaching method. Create a dialogue between a Teacher and a Student that explores the concepts in the text through probing questions that lead the student to discover insights for themselves. The dialogue should follow the Socratic method where the teacher asks leading questions rather than providing direct answers. Include at least 8-10 exchanges that progressively build understanding. Format as plain text, alternating lines starting with 'Teacher:' or 'Student:'. Do NOT return JSON or wrap in any object.`,
+  Platonic: `You are an expert in the Platonic dialogue style of teaching. Create a dialogue between a Teacher and a Student that explores the concepts in the text in a structured, explanatory manner. The teacher should guide the conversation while providing clear explanations. The dialogue should include at least 8-10 exchanges that systematically develop the subject matter. Format as plain text, alternating lines starting with 'Teacher:' or 'Student:'. Do NOT return JSON or wrap in any object.`,
+  Story: `You are an expert educational storyteller. Create a dialogue between a Teacher and a Student that teaches the concepts in the text through engaging, story-driven conversation. Alternate speakers. Format as plain text, alternating lines starting with 'Teacher:' or 'Student:'. Do NOT return JSON or wrap in any object.`
 };
 
 /**
@@ -42,7 +40,7 @@ export const generateReed = async (req, res) => {
       });
     }
     
-    // Define the prompt based on teaching style
+    // Use the new plain text prompt
     const systemPrompt = STYLE_PROMPTS[style];
     
     // Prepare prompt with text truncation if needed (Mistral has token limits)
@@ -88,7 +86,7 @@ export const generateReed = async (req, res) => {
     // Extract the generated text
     const generatedText = data.choices[0].message.content;
     
-    // Return the generated text
+    // Return the generated text as-is (let frontend parse)
     return res.json({
       success: true,
       generatedText,
