@@ -164,9 +164,12 @@ Format the response as a JSON array of 5 question objects.`
     const generatedText = data.choices[0].message.content;
     let questions;
     try {
-      questions = JSON.parse(generatedText);
+      // Strip Markdown code block formatting before parsing JSON
+      const cleanedText = generatedText.replace(/```json\n|\n```|```/g, '').trim();
+      questions = JSON.parse(cleanedText);
     } catch (error) {
       console.error('Error parsing LLM response:', error);
+      console.log('Raw LLM response:', generatedText); // Log the raw response for debugging
       return res.status(500).json({
         success: false,
         error: 'Failed to parse quiz questions from LLM response'
